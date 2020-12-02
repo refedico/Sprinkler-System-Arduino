@@ -62,7 +62,7 @@ void loop1() //Stato 1 Tutto Spento
    {
     stato = 3;
    }
-   else if (temperatura > 30)
+   else if (temperatura > 3000)
    {
     stato = 2;
    }
@@ -169,5 +169,5 @@ void inter_buzz()
 }
 void cont_buzz()
 {
-   tone(buzzerpin,400,10000); 
+   tone(buzzerpin,400,5000); 
 }
