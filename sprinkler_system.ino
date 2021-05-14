@@ -7,8 +7,8 @@ const int fumopin = 5;
 //Variabili
 int statofiamma = 0;     
 int statofumo = 0;
-double temperatura;
-double val;
+double temperatura{};
+double val{};
 //Stato
 int stato = 1;
 
@@ -23,26 +23,10 @@ void setup()
 
 void loop()
 {
-  switch(stato){
-    case 1:
-      loop1();
-    break;
-
-    case 2:
-      loop2();
-    break;
-
-    case 3:
-      loop3();
-    break;
-
-    case 4:
-      loop4();
-    break;
-  }
+    state_loop(stato);
 }
 
-void loop1() //Stato 1 Tutto Spento
+void state_loop(int& state) //Stato parametrizzato
 {   
    Serial.println("Stato fumo:");
    Serial.println (statofumo);
@@ -52,121 +36,35 @@ void loop1() //Stato 1 Tutto Spento
    statofumo = digitalRead(fumopin);
    statofiamma = digitalRead(sensorpin);
    temperatura = ((analogRead(A2) * (5.0/1024))-0.5)/0.01;
+  
+   if (state == 1){
    digitalWrite(ledpin,LOW);
-
-   if(statofiamma)
-   {
-    stato = 4;
    }
-   else if (statofumo)
-   {
-    stato = 3;
-   }
-   else if (temperatura > 3000)
-   {
-    stato = 2;
-   }
-   else
-   {
-    stato = 1;
-   }
-}
-void loop2() //Stato 2 Led Acceso
-{   
-   Serial.println("Stato fumo:");
-   Serial.println (statofumo);
-   Serial.println("Stato fiamma:");
-   Serial.println (statofiamma);
-   
-   statofumo = digitalRead(fumopin);
-   statofiamma = digitalRead(sensorpin);
-   temperatura = ((analogRead(A2) * (5.0/1024))-0.5)/0.01;
+  
+   if (state == 2){
    digitalWrite(ledpin,HIGH);
-
-   if(statofiamma)
-   {
-    stato = 4;
    }
-   else if (statofumo)
-   {
-    stato = 3;
-   }
-   else if (temperatura > 3000)
-   {
-    stato = 2;
-   }
-   else
-   {
-    stato = 1;
-   }
-}
-void loop3() //Stato 3 Buzzer Intermittenza
-{   
-   Serial.println("Stato fumo:");
-   Serial.println (statofumo);
-   Serial.println("Stato fiamma:");
-   Serial.println (statofiamma);
-   
-   statofumo = digitalRead(fumopin);
-   statofiamma = digitalRead(sensorpin);
-   temperatura = ((analogRead(A2) * (5.0/1024))-0.5)/0.01;
+  
+   if (state == 3){
    digitalWrite(ledpin,HIGH);
    inter_buzz();
-
-   if(statofiamma)
-   {
-    stato = 4;
    }
-   else if (statofumo)
-   {
-    stato = 3;
-   }
-   else if (temperatura > 3000)
-   {
-    stato = 2;
-   }
-   else
-   {
-    stato = 1;
-   }
-}
-void loop4() //Stato 4 Buzzer Continuo
-{   
-   Serial.println("Stato fumo:");
-   Serial.println (statofumo);
-   Serial.println("Stato fiamma:");
-   Serial.println (statofiamma);
-   
-   statofumo = digitalRead(fumopin);
-   statofiamma = digitalRead(sensorpin);
-   temperatura = ((analogRead(A2) * (5.0/1024))-0.5)/0.01;
+  
+   if (state == 4{
    digitalWrite(ledpin,HIGH);
    cont_buzz();
-
-   if(statofiamma)
-   {
-    stato = 4;
    }
-   else if (statofumo)
-   {
-    stato = 3;
-   }
-   else if (temperatura > 3000)
-   {
-    stato = 2;
-   }
-   else
-   {
-    stato = 1;
-   }
+   
+   state = statofiamma?4:statofumo?3:temperatura>3000?2:1;
 }
-
+       
 void inter_buzz()
 {
    tone(buzzerpin,400,200);
    delay (300); 
    tone(buzzerpin,400,200); 
 }
+       
 void cont_buzz()
 {
    tone(buzzerpin,400,5000); 
